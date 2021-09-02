@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/gerenciador-pessoa")
+@CrossOrigin("*")
 public class PessoaController implements Serializable {
 
     @Autowired

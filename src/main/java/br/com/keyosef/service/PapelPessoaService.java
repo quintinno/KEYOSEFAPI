@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PapelPessoaService implements Serializable {
@@ -16,6 +17,11 @@ public class PapelPessoaService implements Serializable {
 
     public List<PapelPessoaModel> findAll() {
         return this.papelPessoaRepository.findAll();
+    }
+
+    public PapelPessoaModel findOne(Long papelPessoaID) {
+        Optional<PapelPessoaModel> papelPessoaModelOptional = this.papelPessoaRepository.findById(papelPessoaID);
+        return papelPessoaModelOptional.get();
     }
 
 }

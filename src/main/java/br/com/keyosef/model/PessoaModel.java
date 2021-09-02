@@ -1,9 +1,13 @@
 package br.com.keyosef.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -26,11 +30,30 @@ public class PessoaModel implements Serializable {
     @Column(name = "IMAGEM", nullable = true)
     private byte[] imagem;
 
+    @JsonProperty("isInstituicaoFinanceira")
     @Column(name = "IS_INSTITUICAO_FINANCEIRA", nullable = false)
     private Boolean isInstituicaoFinanceira;
 
+    @JsonProperty("isAtivo")
     @Column(name = "IS_ATIVO", nullable = false)
     private Boolean isAtivo;
+
+    @JsonProperty("categoriaPessoa")
+    @OneToOne
+    @JoinColumn(name = "ID_CATEGORIA_PESSOA", referencedColumnName = "codigo", nullable = false)
+    private CategoriaPessoaModel categoriaPessoaModel;
+
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "TB_PESSOA_PAPEL", joinColumns =
+        @JoinColumn(name = "ID_PESSOA", referencedColumnName = "codigo", nullable = false), inverseJoinColumns =
+        @JoinColumn(name = "ID_PAPEL", referencedColumnName = "codigo", nullable = false), uniqueConstraints = {
+            @UniqueConstraint(columnNames = { "ID_PESSOA", "ID_PAPEL" })})
+    List<PapelPessoaModel> papelPessoaModelList = new ArrayList<>();
+
+    @JsonProperty("papelPessoaID")
+    @Transient
+    private Long papelPessoaID;
 
     public PessoaModel() { }
 
@@ -80,6 +103,30 @@ public class PessoaModel implements Serializable {
 
     public void setAtivo(Boolean ativo) {
         isAtivo = ativo;
+    }
+
+    public CategoriaPessoaModel getCategoriaPessoaModel() {
+        return categoriaPessoaModel;
+    }
+
+    public void setCategoriaPessoaModel(CategoriaPessoaModel categoriaPessoaModel) {
+        this.categoriaPessoaModel = categoriaPessoaModel;
+    }
+
+    public List<PapelPessoaModel> getPapelPessoaModelList() {
+        return papelPessoaModelList;
+    }
+
+    public void setPapelPessoaModelList(List<PapelPessoaModel> papelPessoaModelList) {
+        this.papelPessoaModelList = papelPessoaModelList;
+    }
+
+    public Long getPapelPessoaID() {
+        return papelPessoaID;
+    }
+
+    public void setPapelPessoaID(Long papelPessoaID) {
+        this.papelPessoaID = papelPessoaID;
     }
 
     @Override

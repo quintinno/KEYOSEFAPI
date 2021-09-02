@@ -1,7 +1,11 @@
 package br.com.keyosef.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -13,11 +17,19 @@ public class PapelPessoaModel implements Serializable {
     @Column(name = "CODIGO", nullable = false)
     private Long codigo;
 
-    @Column(name = "DESCRICAO", nullable = false)
+    @Column(name = "DESCRICAO", unique = true, nullable = false)
     private String descricao;
 
-    @Column(name = "SIGLA", nullable = false)
+    @Column(name = "SIGLA", unique = true, nullable = false)
     private String sigla;
+
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "TB_PESSOA_PAPEL", joinColumns =
+        @JoinColumn(name = "ID_PAPEL", referencedColumnName = "codigo", nullable = false), inverseJoinColumns =
+        @JoinColumn(name = "ID_PESSOA", referencedColumnName = "codigo", nullable = false), uniqueConstraints = {
+            @UniqueConstraint(columnNames = { "ID_PAPEL", "ID_PESSOA" })})
+    private List<PessoaModel> pessoaModelList = new ArrayList<>();
 
     public PapelPessoaModel() { }
 
@@ -43,6 +55,14 @@ public class PapelPessoaModel implements Serializable {
 
     public void setSigla(String sigla) {
         this.sigla = sigla;
+    }
+
+    public List<PessoaModel> getPessoaModelList() {
+        return pessoaModelList;
+    }
+
+    public void setPessoaModelList(List<PessoaModel> pessoaModelList) {
+        this.pessoaModelList = pessoaModelList;
     }
 
     @Override

@@ -13,10 +13,10 @@ public class CategoriaPessoaModel  implements Serializable {
     @Column(name = "CODIGO", nullable = false)
     private Long codigo;
 
-    @Column(name = "DESCRICAO", nullable = false)
+    @Column(name = "DESCRICAO", unique = true, nullable = false)
     private String descricao;
 
-    @Column(name = "SIGLA", nullable = false)
+    @Column(name = "SIGLA", unique = true, nullable = false)
     private String sigla;
 
     public CategoriaPessoaModel() { }
