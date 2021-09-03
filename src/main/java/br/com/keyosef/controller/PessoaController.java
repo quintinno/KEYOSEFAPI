@@ -22,6 +22,11 @@ public class PessoaController implements Serializable {
         return ResponseEntity.ok().body(this.pessoaService.findAll());
     }
 
+    @GetMapping("/{codigo}")
+    public ResponseEntity<PessoaModel> findOne(@PathVariable Long codigo) {
+        return ResponseEntity.ok().body(this.pessoaService.findOne(codigo));
+    }
+
     @PostMapping
     public ResponseEntity<PessoaModel> save(@RequestBody PessoaModel pessoaModel) {
         return ResponseEntity.ok().body(this.pessoaService.save(pessoaModel));
